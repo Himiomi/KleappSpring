@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import br.com.pedrodeveloper.springdataexamples.entities.Cliente;
 import br.com.pedrodeveloper.springdataexamples.repository.ClienteRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 public class ClienteController {
 
@@ -20,39 +23,39 @@ public class ClienteController {
 
 	@GetMapping("/clientes")
 	public String getClientes(Model model) {
-		
-		Page<Cliente> clientes = new PageImpl<>(clienteRepository.findAll());
+
+		ArrayList<Cliente> clientes = (ArrayList<Cliente>) clienteRepository.findAll();
 		model.addAttribute("clientes", clientes);
-		
-		return "clientes";
+
+		return clientes.toString();
 	}
-	
+
 	@GetMapping("/clientes/{id}")
 	public String getMovieById(@PathVariable(required = true) Integer id, Model model) {
 		Cliente cliente = clienteRepository.findById(id).orElse(null);
-		
+
 		if (cliente == null)
 			throw new IllegalArgumentException("Cliente Id not found.");
 
 		model.addAttribute("cliente", cliente);
-		
+
 		return "clientes-detail";
 	}
-	
+
 	@PostMapping("/movies")
 	public Cliente addMovie(@RequestBody Cliente movie) {
 		return clienteRepository.save(movie);
 	}
-	
+
 	@DeleteMapping("/movies/{id}")
 	public ResponseEntity<?> deleteMovie(@PathVariable(required = true) Integer id) {
 		Cliente cliente = clienteRepository.findById(id).orElse(null);
-		
+
 		if (cliente == null)
 			throw new IllegalArgumentException("Cliente Id not found.");
-		
+
 		clienteRepository.delete(cliente);
-		
+
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
