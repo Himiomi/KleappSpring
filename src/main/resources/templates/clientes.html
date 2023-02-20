@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<title>Spring Data Examples by Pedro Vitore</title>
+	</head>
+	<body>
+		<div>
+			<h1>Clientes</h1>
+		</div>
+		<div>
+			<a style="margin-right: 2em" th:if="${clientes.hasPrevious()}" th:href="@{/clientes(page=${clientes.previousPageable().pageNumber})}">Anterior</a>
+			<span th:text="'P�gina ' + ${clientes.number + 1} + ' de ' + ${clientes.totalPages}" />
+			<a style="margin-left: 2em" th:if="${clientes.hasNext()}" th:href="@{/clientes(page=${clientes.nextPageable().pageNumber})}">Pr�xima</a>
+		</div>
+		<div>
+            <h2>Clientes</h2>
+			
+			<form th:action="@{/clientes}" method="GET">
+				<label>Nome:</label>
+				<input type="text" th:name="name" th:value="${param.name}" />
+				
+				<label>Data Inicial:</label>
+				<input type="date" th:name="initialDate" th:value="${param.initialDate}" />
+				
+				<label>Data Final:</label>
+				<input type="date" th:name="finalDate" th:value="${param.finalDate}" />
+				
+				<input type="submit" />
+			</form>
+			
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Cadastro em</th>
+                    </tr>
+                </thead>
+                <tbody>
+	                <tr th:each="cliente : ${clientes}">
+	                    <td th:text="${cliente.nome}"></td>
+	                    <td th:text="${cliente.cadastro}"></td>
+                		<td><a th:href="@{/clientes/{id}(id=${cliente.id})}">Editar</a></td>
+	                </tr>
+	            </tbody>
+	        </table>
+		</div>
+	</body>
+</html>
